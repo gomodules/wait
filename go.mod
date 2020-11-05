@@ -1,4 +1,4 @@
-module k8s.io/apimachinery/pkg/util/wait
+module gomodules.xyz/wait
 
 go 1.14
 
