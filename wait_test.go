@@ -26,8 +26,7 @@ import (
 	"testing"
 	"time"
 
-	"k8s.io/apimachinery/pkg/util/clock"
-	"k8s.io/apimachinery/pkg/util/runtime"
+	"gomodules.xyz/clock"
 )
 
 func TestUntil(t *testing.T) {
@@ -176,19 +175,19 @@ func TestJitterUntilReturnsImmediately(t *testing.T) {
 
 func TestJitterUntilRecoversPanic(t *testing.T) {
 	// Save and restore crash handlers
-	originalReallyCrash := runtime.ReallyCrash
-	originalHandlers := runtime.PanicHandlers
+	originalReallyCrash := reallyCrash
+	originalHandlers := panicHandlers
 	defer func() {
-		runtime.ReallyCrash = originalReallyCrash
-		runtime.PanicHandlers = originalHandlers
+		reallyCrash = originalReallyCrash
+		panicHandlers = originalHandlers
 	}()
 
 	called := 0
 	handled := 0
 
 	// Hook up a custom crash handler to ensure it is called when a jitter function panics
-	runtime.ReallyCrash = false
-	runtime.PanicHandlers = []func(interface{}){
+	reallyCrash = false
+	panicHandlers = []func(interface{}){
 		func(p interface{}) {
 			handled++
 		},

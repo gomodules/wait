@@ -24,8 +24,7 @@ import (
 	"sync"
 	"time"
 
-	"k8s.io/apimachinery/pkg/util/clock"
-	"k8s.io/apimachinery/pkg/util/runtime"
+	"gomodules.xyz/clock"
 )
 
 // For any test of the style:
@@ -151,7 +150,7 @@ func BackoffUntil(f func(), backoff BackoffManager, sliding bool, stopCh <-chan 
 		}
 
 		func() {
-			defer runtime.HandleCrash()
+			defer handleCrash()
 			f()
 		}()
 
@@ -226,7 +225,7 @@ func runConditionWithCrashProtection(condition ConditionFunc) (bool, error) {
 // runConditionWithCrashProtectionWithContext runs a
 // ConditionWithContextFunc with crash protection.
 func runConditionWithCrashProtectionWithContext(ctx context.Context, condition ConditionWithContextFunc) (bool, error) {
-	defer runtime.HandleCrash()
+	defer handleCrash()
 	return condition(ctx)
 }
 
